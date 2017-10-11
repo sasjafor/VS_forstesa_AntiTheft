@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">VS_forstesa_AntiTheft</string>
+    <string name="toggleOff">Anti-Theft-Alarm disabled</string>
+    <string name="toggleOn">Anti-Theft-Alarm enabled</string>
+    <string name="notificationTitle">AntiTheft notification</string>
+    <string name="notificationText">Tap to unlock device</string>
+    <string name="settings">Choose alarm options</string>
+    <string name="sensitivity">Sensitivity</string>
+    <string name="delay">Delay</string>
+    <string name="detector">Movement Detector</string>
 </resources>

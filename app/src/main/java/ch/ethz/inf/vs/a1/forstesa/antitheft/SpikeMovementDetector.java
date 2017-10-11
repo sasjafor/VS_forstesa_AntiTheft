@@ -8,9 +8,23 @@ public class SpikeMovementDetector extends AbstractMovementDetector {
         super(callback, sensitivity);
     }
 
+    private int det;
+    public void setDetector(int detector) {
+        det = detector;
+    }
+
     @Override
     public boolean doAlarmLogic(float[] values) {
-		// TODO, insert your logic here
+        if (det == 0) {
+            float sum = 0;
+            for (float i : values) sum += Math.abs(i);
+            if (sum >= this.sensitivity) return true;
+        } else {
+            float max = 5;
+            boolean containsMax = false;
+            for (float i : values) containsMax = (containsMax || (Math.abs(i)) >= max);
+            if (containsMax) return true;
+        }
         return false;
     }
 }
