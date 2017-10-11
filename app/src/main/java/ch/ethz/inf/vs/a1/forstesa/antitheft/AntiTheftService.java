@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -59,34 +60,42 @@ public class AntiTheftService extends Service implements AlarmCallback {
     }
 
     public void onDelayStarted() {
-        int delay;
-        String numberString = sharedPreferences.getString("delay", "4000");
-        if (numberString.equals("")) {
-            delay = 4000;
-        } else {
-            delay = Integer.parseInt(numberString);
-        }
+        if (!detect.getMov()) {
+            detect.setMov(true);
+            int delay;
+            String numberString = sharedPreferences.getString("delay", "4000");
+            if (numberString.equals("")) {
+                delay = 4000;
+            } else {
+                delay = Integer.parseInt(numberString);
+            }
 
-        try {
-            Thread.sleep(delay);
-        } catch (InterruptedException e) {
-            // was interrupted
-        }
-
-        if (mp != null) {
-            mp.start();
+            runnable = new Runnable()
+            {
+                @Override
+                public void run() {
+                    if (mp != null) {
+                        mp.setLooping(true);
+                        mp.start();
+                    }
+                }
+            };
+            handler = new Handler();
+            handler.postDelayed(runnable, delay);
         }
     }
 
     @Override
     public void onDestroy() {
         if (mp != null) {
+            mp.setLooping(false);
             mp.stop();
             mp.release();
         }
-
+        detect.setMov(false);
         sensorManager.unregisterListener(detect);
         notificationManager.cancel(noteID);
+        if (runnable != null) handler.removeCallbacks(runnable);
         super.onDestroy();
     }
 
@@ -101,4 +110,6 @@ public class AntiTheftService extends Service implements AlarmCallback {
     private SensorManager sensorManager;
     private SpikeMovementDetector detect;
     private MediaPlayer mp;
+    private Handler handler;
+    private Runnable runnable;
 }

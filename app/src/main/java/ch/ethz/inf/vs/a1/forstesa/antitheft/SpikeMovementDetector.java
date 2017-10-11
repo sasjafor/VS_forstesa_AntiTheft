@@ -1,7 +1,5 @@
 package ch.ethz.inf.vs.a1.forstesa.antitheft;
 
-import ch.ethz.inf.vs.a1.forstesa.antitheft.AlarmCallback;
-
 public class SpikeMovementDetector extends AbstractMovementDetector {
 
     public SpikeMovementDetector(AlarmCallback callback, int sensitivity) {
@@ -9,8 +7,18 @@ public class SpikeMovementDetector extends AbstractMovementDetector {
     }
 
     private int det;
+    private boolean firstMov = false;
+
     public void setDetector(int detector) {
         det = detector;
+    }
+
+    public void setMov(boolean mov) {
+        firstMov = mov;
+    }
+
+    public boolean getMov() {
+        return firstMov;
     }
 
     @Override
