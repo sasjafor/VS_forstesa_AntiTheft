@@ -8,4 +8,5 @@
     <string name="sensitivity">Sensitivity</string>
     <string name="delay">Delay</string>
     <string name="detector">Movement Detector</string>
+    <string name="delayTooHighToastText">Please choose a lower delay. Delay has been reset to default.</string>
 </resources>

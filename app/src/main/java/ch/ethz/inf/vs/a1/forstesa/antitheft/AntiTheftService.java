@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
@@ -14,6 +15,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class AntiTheftService extends Service implements AlarmCallback {
 
@@ -67,7 +71,16 @@ public class AntiTheftService extends Service implements AlarmCallback {
             if (numberString.equals("")) {
                 delay = 4000;
             } else {
-                delay = Integer.parseInt(numberString);
+                try {
+                    delay = Integer.parseInt(numberString);
+                } catch (NumberFormatException e){
+                    delay = 4000;
+                    Context context = getApplicationContext();
+                    String text = getString(R.string.delayTooHighToastText);
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
             }
 
             runnable = new Runnable()
