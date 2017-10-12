@@ -7,7 +7,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
@@ -16,8 +15,6 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 public class AntiTheftService extends Service implements AlarmCallback {
 
@@ -87,9 +84,17 @@ public class AntiTheftService extends Service implements AlarmCallback {
             {
                 @Override
                 public void run() {
-                    if (mp != null) {
-                        mp.setLooping(true);
-                        mp.start();
+                    try {
+                        if (mp != null) {
+                            mp.setLooping(true);
+                            mp.start();
+                        }
+                    } catch (IllegalStateException e) {
+                        Context context = getApplicationContext();
+                        String text = getString(R.string.mediaplayerHandlingToastText);
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
                     }
                 }
             };
